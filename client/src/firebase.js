@@ -4,8 +4,8 @@ import 'firebase/database';
 import 'firebase/storage';
 
 
-const config = {
-  apiKey: "AIzaSyDBNEPHDuEV94EAA4Cw8YX5uWwCMJF3g9o",
+var config = {
+  apiKey: "AIzaSyAs2jICte2Io0-u7A635ywyzO1u55vgSBU",
   authDomain: "reactslack-6b045.firebaseapp.com",
   databaseURL: "https://reactslack-6b045.firebaseio.com",
   projectId: "reactslack-6b045",
