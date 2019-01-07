@@ -9,8 +9,8 @@ export const setUser = user => {
   }
 }
 
-export const stopLoading = () => {
+export const clearUser = () => {
   return {
-    type: actionType.STOP_LOADING
+    type: actionType.CLEAR_USER
   }
 }

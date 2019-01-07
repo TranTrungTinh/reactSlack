@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from './firebase';
 
 import { connect } from 'react-redux';
-import { setUser, stopLoading } from './redux/actions';
+import { setUser, clearUser } from './redux/actions';
 
 import App from './components/App';
 import Login from './components/Auth/Login';
@@ -18,7 +18,8 @@ class Root extends Component {
         this.props.setUser(user);
         this.props.history.push('/');
       } else {
-        this.props.stopLoading();
+        this.props.clearUser();
+        this.props.history.push('/login');
       }
     });
   }
@@ -36,4 +37,4 @@ class Root extends Component {
 const mapStateToProps = state => ({
   isLoading: state.user.isLoading
 })
-export default connect(mapStateToProps, { setUser, stopLoading })(Root);
+export default connect(mapStateToProps, { setUser, clearUser })(Root);

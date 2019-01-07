@@ -12,8 +12,8 @@ const user_reducer = (state = initialState, action) => {
       isLoading: false
     }
   }
-  if(action.type === actionType.STOP_LOADING) {
-    return {...state.currentUser, isLoading: false}
+  if(action.type === actionType.CLEAR_USER) {
+    return {...initialState, isLoading: false}
   }
 
   return state;
