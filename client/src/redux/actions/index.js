@@ -8,3 +8,9 @@ export const setUser = user => {
     }
   }
 }
+
+export const stopLoading = () => {
+  return {
+    type: actionType.STOP_LOADING
+  }
+}

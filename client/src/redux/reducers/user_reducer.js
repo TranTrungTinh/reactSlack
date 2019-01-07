@@ -9,8 +9,11 @@ const user_reducer = (state = initialState, action) => {
   if(action.type === actionType.SET_USER) {
     return {
       currentUser: action.payload.currentUser,
-      isLoading: true
+      isLoading: false
     }
+  }
+  if(action.type === actionType.STOP_LOADING) {
+    return {...state.currentUser, isLoading: false}
   }
 
   return state;
