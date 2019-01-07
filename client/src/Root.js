@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import firebase from './firebase';
 
+import { connect } from 'react-redux';
+import { setUser } from './redux/actions';
+
 import App from './components/App';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 
 import { Switch, Route } from 'react-router-dom';
 
-export default class Root extends Component {
+class Root extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      if(user) this.props.history.push('/')
+      if(user) {
+        this.props.setUser(user);
+        this.props.history.push('/');
+      }
     });
   }
   render() {
@@ -23,3 +29,5 @@ export default class Root extends Component {
     )
   }
 }
+
+export default connect(null, { setUser })(Root);

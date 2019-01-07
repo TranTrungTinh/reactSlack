@@ -7,11 +7,16 @@ import Root from './Root';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, withRouter } from 'react-router-dom';
 
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 const RootAuthRouter = withRouter(Root);
 const RootWithAuth = () => (
-  <Router>
-    <RootAuthRouter />
-  </Router>
+  <Provider store={store}>
+    <Router>
+      <RootAuthRouter />
+    </Router>
+  </Provider>
 );
 
 ReactDOM.render(<RootWithAuth />, document.getElementById('root'));
