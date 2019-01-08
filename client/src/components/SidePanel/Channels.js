@@ -1,12 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import firebase from '../../firebase';
 import { Menu, Icon, Modal, Form, Input, Button } from 'semantic-ui-react';
 
 export default class Channels extends Component {
   state = {
+    user: this.props.currentUser,
     channels: [],
     chanelName: '',
     chanelDetail: '',
-    modal: false
+    modal: false,
+    firebase: firebase.database().ref('Channels')
+  }
+
+  componentDidMount() {
+    this.addChannelListener()
   }
 
   closeModel = () => { this.setState({ modal: false }) };
@@ -15,6 +22,53 @@ export default class Channels extends Component {
   handleChange = event => {
     this.setState({ [event.target.name] : event.target.value });
   }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    if(!this.isFormValid(this.state)) return;
+    this.addChannel();
+  }
+
+  isFormValid = ({ chanelName, chanelDetail }) => chanelName && chanelDetail;
+
+  addChannel = () => {
+    const { user, chanelDetail, chanelName, firebase } = this.state;
+    const newChannel = {
+      name: chanelName,
+      details: chanelDetail,
+      createdBy: {
+        name: user.displayName,
+        avatar: user.photoURL
+      }
+    }
+    firebase.push(newChannel)
+    .then(() => {
+      this.setState({ chanelDetail: '', chanelName: '' });
+      this.closeModel();
+    })
+    .catch(err => console.error(err));
+  }
+
+  addChannelListener = () => {
+    let loadchannels = [];
+    this.state.firebase.on('child_added', snap => {
+      loadchannels.push(snap.val());
+      this.setState({ channels: loadchannels });
+    });
+  }
+
+  displayChannels = channels => (
+    channels.length > 0 && channels.map((channel, i) => (
+      <Menu.Item
+        key={i}
+        name={channel.name}
+        style={{ opacity: 0.7 }}
+        onClick={() => console.log(channel)}
+      >
+        # {channel.name}
+      </Menu.Item>
+    ))
+  )
 
   render() {
     const { channels, modal } = this.state;
@@ -27,12 +81,13 @@ export default class Channels extends Component {
             </span>{" "}
             ({ channels.length })<Icon name='add' link onClick={this.openModel}/>
           </Menu.Item>
+          {this.displayChannels(channels)}
         </Menu.Menu>
 
         <Modal open={modal} onClose={this.closeModel}>
           <Modal.Header>Add new channel</Modal.Header>
           <Modal.Content>
-            <Form>
+            <Form onSubmit={this.handleSubmit}>
               <Form.Field>
                 <Input 
                   fluid
@@ -53,7 +108,7 @@ export default class Channels extends Component {
           </Modal.Content>
           <Modal.Actions>
             <Button.Group>
-              <Button positive>
+              <Button positive onClick={this.handleSubmit}>
                 <Icon name="checkmark"/>Save
               </Button>
               <Button.Or />

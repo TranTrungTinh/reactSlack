@@ -25,7 +25,6 @@ export default class Login extends Component {
     .auth()
     .signInWithEmailAndPassword(this.state.email, this.state.password)
     .then(signInUser => {
-      console.log(signInUser);
       this.setState({ loading: false });
     })
     .catch(err => this.setState({ errors: this.state.errors.concat(err), loading: false }));    
