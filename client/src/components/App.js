@@ -19,7 +19,7 @@ const App = ({ currentUser }) => (
       <Messages />
     </Grid.Column>
 
-    <Grid.Column style={{ with: 4 }} >
+    <Grid.Column style={{ with: 3 }} >
       <MetaPanel />
     </Grid.Column>
 

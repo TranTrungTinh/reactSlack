@@ -139,7 +139,7 @@ class Channels extends Component {
             </Form>
           </Modal.Content>
           <Modal.Actions>
-            <Button.Group>
+            <Button.Group widths="2">
               <Button positive onClick={this.handleSubmit}>
                 <Icon name="checkmark"/>Save
               </Button>
