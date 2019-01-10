@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import firebase from '../../firebase';
 import uuid from 'uuid/v4';
 import { Segment, Button, Input } from 'semantic-ui-react';
+
 import FileModal from './FileModal';
+import ProgressBar from './ProgressBar';
 
 export default class MessagesFrom extends Component {
 
@@ -75,6 +77,7 @@ export default class MessagesFrom extends Component {
   uploadProgress = (ref, pathToUpLoad) => {
     this.state.uploadTask.on('state_changed', snap => {
       const percentUploaded = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+      this.props.isProgressBarVisible(percentUploaded);
       this.setState({ percentUploaded });
     }, 
       (error) => this.uploadError(error),
@@ -93,13 +96,7 @@ export default class MessagesFrom extends Component {
   startedUploadFile = (ref, pathToUpLoad) => {
     this.state.uploadTask.snapshot.ref.getDownloadURL()
     .then(downloadURL => this.sendFileMessage(downloadURL, ref, pathToUpLoad))
-    .catch(error => {
-      this.setState({ 
-        errors: this.state.errors.concat(error),
-        uploadState: 'error',
-        uploadTask: null 
-      })
-    })
+    .catch(this.uploadError)
   }
 
   sendFileMessage = (filePath, ref, pathToUpLoad) => {
@@ -114,7 +111,8 @@ export default class MessagesFrom extends Component {
 
   
   render() {
-    const { errors, message, loading, modal } = this.state;
+    const { errors, message, loading, 
+      modal, uploadState, percentUploaded } = this.state;
     return (
       <Segment className="message__form">
         <Input 
@@ -143,14 +141,19 @@ export default class MessagesFrom extends Component {
             content="Upload Media"
             labelPosition="right"
             icon="cloud upload"
+            disabled={uploadState === 'uploading'}
             onClick={this.openModal}
           />
+        </Button.Group>
           <FileModal 
             modal={modal} 
             onCloseModal={this.closeModal} 
             onUploadFile={this.uploadFile}
           />
-        </Button.Group>
+          <ProgressBar 
+            uploadState={uploadState}
+            percentUploaded={percentUploaded}
+          />
       </Segment>
     )
   }
