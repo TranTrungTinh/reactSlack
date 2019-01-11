@@ -11,14 +11,14 @@ import SidePanel from './SidePanel/SidePanel';
 
 const App = ({ currentUser, currentChannel }) => (
   !currentUser ? (<Redirect to="/login"/>) :(
-  <Grid columns="equal" className="app" style={{ background: '#eee' }}>
+  <Grid className="app" style={{ background: '#eee' }}>
     <ColorPanel />
     <SidePanel 
       key={currentUser && currentUser.uid}
       currentUser={currentUser}
     />
 
-    <Grid.Column style={{ marginLeft: 320 }} >
+    <Grid.Column style={{ marginLeft: 370 }} width="7" >
       <Messages 
         key={currentChannel && currentChannel.id}
         currentChannel={currentChannel}
@@ -26,7 +26,7 @@ const App = ({ currentUser, currentChannel }) => (
       />
     </Grid.Column>
 
-    <Grid.Column style={{ with: 3 }} >
+    <Grid.Column style={{ with: 4 }} width="4" >
       <MetaPanel />
     </Grid.Column>
 

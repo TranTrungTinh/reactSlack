@@ -23,3 +23,12 @@ export const setCurrentChannel = channel => {
     }
   }
 }
+
+export const setPrivateChannel = value => {
+  return {
+    type: actionType.SET_PRIVATE_CHANNEL,
+    payload: {
+      isPrivateChannel: value
+    }
+  }
+}
