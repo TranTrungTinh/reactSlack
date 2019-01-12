@@ -10,6 +10,7 @@ import DirectUserItem from './DirectUserItem';
 class DirectMessage extends Component {
   
   state = {
+    activeChannel: '',
     user: this.props.currentUser,
     users: [],
     usersRef: firebase.database().ref('Users'),
@@ -72,7 +73,12 @@ class DirectMessage extends Component {
 
   displayDirectMessage = users => (
     users.map(user => (
-      <DirectUserItem key={user.uid} user={user} changeChannel={this.changeChannel} />))
+      <DirectUserItem 
+        key={user.uid} user={user} 
+        changeChannel={this.changeChannel}
+        activeChannel={this.state.activeChannel} 
+      />
+    ))
   )
 
   changeChannel = user => {
@@ -83,12 +89,17 @@ class DirectMessage extends Component {
     };
     this.props.setCurrentChannel(channel);
     this.props.setPrivateChannel(true);
+    this.setActiveChannel(user.uid)
   }
 
   getChannelId = userId => {
     const currentUserId = this.state.user.uid;
     return userId < currentUserId ?
       `${userId}/${currentUserId}` : `${currentUserId}/${userId}`;
+  }
+
+  setActiveChannel = userId => {
+    this.setState({ activeChannel: userId });
   }
 
   render() {
