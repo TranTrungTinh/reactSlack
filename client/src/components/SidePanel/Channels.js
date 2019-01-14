@@ -71,9 +71,8 @@ class Channels extends Component {
 
   addNotificationListener = channelId => {
     this.state.messageRef.child(channelId).on('value', snap => {
-      if(this.state.channel) {
-        this.handleNotifications(channelId, this.state.channel.id, this.state.notifications, snap);
-      }
+      if(!this.state.channel) return;
+      this.handleNotifications(channelId, this.state.channel.id, this.state.notifications, snap);
     })
   }
 

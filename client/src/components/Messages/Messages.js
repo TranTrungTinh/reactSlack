@@ -13,17 +13,20 @@ export default class Messages extends Component {
     messageLoading: true,
     channel: this.props.currentChannel,
     user: this.props.currentUser,
+    usersRef: firebase.database().ref('Users'),
     progressBar: false,
     numUniqueUsers: '',
     searchTem: '',
     searchLoading: false,
-    searchResults: []
+    searchResults: [],
+    isStarChannel: false
   }
 
   componentDidMount() {
     const { channel, user } = this.state;
     if(channel && user) {
       this.addListener(channel.id);
+      this.addUserStarListener(channel.id, user.uid);
     }
   }
 
@@ -38,6 +41,17 @@ export default class Messages extends Component {
       this.setState({ messages: loadMessages, messageLoading: false });
       this.countUniqueUsers(loadMessages);
     });
+  }
+
+  addUserStarListener = (channelId, userId) => {
+    this.state.usersRef
+    .child(userId).child('starred').once('value')
+    .then(data => {
+      if(!data.val()) return;
+      const channelIds = Object.keys(data.val());
+      const prevStarred = channelIds.includes(channelId);
+      this.setState({ isStarChannel: prevStarred })
+    })
   }
 
   displayMessages = messages => (
@@ -89,8 +103,36 @@ export default class Messages extends Component {
     setTimeout(() => this.setState({ searchLoading: false }), 1000);
   }
 
+  toggleStarChannel = () => {
+    this.setState(preState => (
+      { isStarChannel: !preState.isStarChannel }
+    ), this.starChannel)
+  }
+
+  starChannel = () => {
+    if(this.state.isStarChannel) {
+      this.state.usersRef
+      .child(`${this.state.user.uid}/starred`)
+      .update({
+        [this.state.channel.id] : {
+          name: this.state.channel.name,
+          details: this.state.channel.details,
+          createdBy: {
+            name: this.state.channel.createdBy.name,
+            avatar: this.state.channel.createdBy.avatar
+          }
+        }
+      })
+    } else {
+      this.state.usersRef
+      .child(`${this.state.user.uid}/starred`)
+      .child(this.state.channel.id)
+      .remove(err => { if(err) console.error(err) });
+    }
+  }
+
   render() {
-    const { messageRef, messages, channel, user, progressBar, 
+    const { messageRef, messages, channel, user, progressBar, isStarChannel, 
       numUniqueUsers, searchTem, searchResults, searchLoading } = this.state;
     return (
       <React.Fragment>
@@ -99,6 +141,8 @@ export default class Messages extends Component {
           numUniqueUsers={numUniqueUsers}
           handleSearchChange={this.handleSearchChange}
           searchLoading={searchLoading}
+          toggleStarChannel={this.toggleStarChannel}
+          isStarChannel={isStarChannel}
         />
 
         <Segment>
