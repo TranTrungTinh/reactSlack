@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Segment, Comment } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import {setUserPost} from '../../redux/actions';
 import firebase from '../../firebase';
 
 import MessagesHeader from './MessagesHeader';
 import MessagesForm from './MessagesFrom';
 import Message from './Message';
 
-export default class Messages extends Component {
+class Messages extends Component {
   state = {
     messageRef: firebase.database().ref('Messages'),
     messages: [],
@@ -40,6 +42,7 @@ export default class Messages extends Component {
       loadMessages.push(snap.val());
       this.setState({ messages: loadMessages, messageLoading: false });
       this.countUniqueUsers(loadMessages);
+      this.countUserPost(loadMessages);
     });
   }
 
@@ -64,7 +67,7 @@ export default class Messages extends Component {
     ))
   )
 
-  displayChannelName = channel => channel ? `#${channel.name}` : '';
+  displayChannelName = channel => channel ? `${channel.name}` : '';
 
   countUniqueUsers = messages => {
     const uniqueUsers = messages.reduce((acc, message) => {
@@ -76,6 +79,21 @@ export default class Messages extends Component {
     const plural = uniqueUsers.length > 1;
     const numUniqueUsers = `${uniqueUsers.length} User${plural ? 's' : ''}`;
     this.setState({ numUniqueUsers });
+  }
+
+  countUserPost = messages => {
+    let userPosts = messages.reduce((acc, message) => {
+      if(message.user.name in acc) {
+        acc[message.user.name].count += 1;
+      } else {
+        acc[message.user.name] = {
+          avatar: message.user.avatar,
+          count: 1
+        }
+      }
+      return acc;
+    }, {});
+    this.props.setUserPost(userPosts);
   }
 
   isProgressBarVisible = percent => {
@@ -141,6 +159,7 @@ export default class Messages extends Component {
           numUniqueUsers={numUniqueUsers}
           handleSearchChange={this.handleSearchChange}
           searchLoading={searchLoading}
+          isPrivateChannel={this.props.isPrivateChannel}
           toggleStarChannel={this.toggleStarChannel}
           isStarChannel={isStarChannel}
         />
@@ -162,3 +181,5 @@ export default class Messages extends Component {
     )
   }
 }
+
+export default connect(null, { setUserPost })(Messages);
