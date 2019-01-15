@@ -24,9 +24,7 @@ export default class Login extends Component {
     firebase
     .auth()
     .signInWithEmailAndPassword(this.state.email, this.state.password)
-    .then(signInUser => {
-      this.setState({ loading: false });
-    })
+    .then(() => this.setState({ loading: false }))
     .catch(err => this.setState({ errors: this.state.errors.concat(err), loading: false }));    
   }
 
@@ -41,7 +39,7 @@ export default class Login extends Component {
   render() {
     const { email, password, errors, loading } = this.state;
     return (
-      <Grid textAlign="center" verticalAlign="middle" className="app">
+      <Grid textAlign="center" verticalAlign="middle" className="login">
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h1" icon color="violet" textAlign="center" >
             <Icon name="code branch" color="violet" />

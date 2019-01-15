@@ -9,16 +9,20 @@ import Messages from './Messages/Messages';
 import MetaPanel from './MetaPanel/MetePanel';
 import SidePanel from './SidePanel/SidePanel';
 
-const App = ({ currentUser, currentChannel, isPrivateChannel, userPosts }) => (
+const App = ({ currentUser, currentChannel, isPrivateChannel, userPosts, color }) => (
   !currentUser ? (<Redirect to="/login"/>) :(
-  <Grid className="app" style={{ background: '#eee' }}>
-    <ColorPanel />
+  <Grid className="app" style={{ background: color.secondaryColor }}>
+    <ColorPanel 
+      key={currentUser && currentUser.name}    
+      currentUser={currentUser}
+    />
     <SidePanel 
       key={currentUser && currentUser.uid}
       currentUser={currentUser}
+      color={color}
     />
 
-    <Grid.Column style={{ marginLeft: 370 }} width="7" >
+    <Grid.Column style={{ marginLeft: 370 }} width="8">
       <Messages 
         key={currentChannel && currentChannel.id}
         currentChannel={currentChannel}
@@ -27,9 +31,9 @@ const App = ({ currentUser, currentChannel, isPrivateChannel, userPosts }) => (
       />
     </Grid.Column>
 
-    <Grid.Column style={{ with: 4 }} width="4" >
+    <Grid.Column width="4" >
       <MetaPanel 
-        key={currentChannel && currentChannel.id}
+        key={currentChannel && currentChannel.name}
         currentChannel={currentChannel}
         isPrivateChannel={isPrivateChannel}
         userPosts={userPosts}
@@ -44,7 +48,8 @@ const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
   currentChannel: state.channel.currentChannel,
   isPrivateChannel: state.channel.isPrivateChannel,
-  userPosts: state.channel.userPosts
+  userPosts: state.channel.userPosts,
+  color: state.color
 });
 export default connect(mapStateToProps)(App);
 

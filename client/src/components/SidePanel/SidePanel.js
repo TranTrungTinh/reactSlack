@@ -8,13 +8,13 @@ import Stars from './Stars';
 
 export default class SidePanel extends Component {
   render() {
-    const { currentUser } = this.props;
+    const { currentUser, color } = this.props;
     return (
       <Menu 
         inverted size="huge" fixed="left" vertical 
-        style={{ background: '#4c3c4c', fontSize: '1.2rem' }}
+        style={{ background: color.primaryColor, fontSize: '1.2rem' }}
       >
-        <UserPanel currentUser={currentUser}/>
+        <UserPanel color={color} currentUser={currentUser}/>
         <Stars currentUser={currentUser} />
         <Channels currentUser={currentUser}/>
         <DirectMessage currentUser={currentUser}/>

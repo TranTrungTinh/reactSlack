@@ -84,7 +84,7 @@ export default class Register extends Component {
   render() {
     const { username, email, password, passwordConfirmation, errors, loading } = this.state;
     return (
-      <Grid textAlign="center" verticalAlign="middle" className="app">
+      <Grid textAlign="center" verticalAlign="middle" className="login">
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h1" icon color="orange" textAlign="center" >
             <Icon name="puzzle piece" color="orange" />
