@@ -46,15 +46,37 @@ class ColorPanel extends Component {
     this.state.usersRef
     .child(`${userId}/colors`)
     .on('child_added', snap => {
-      userColors.unshift(snap.val());
+      userColors.unshift({...snap.val(), id: snap.key});
       this.setState({ userColors });
     })
+
+    this.state.usersRef
+    .child(`${userId}/colors`)
+    .on('child_removed', snap => {
+      const filterredColors = this.state.userColors.filter(color => {
+        return color.id !== snap.key;
+      });
+      this.setState({ userColors: filterredColors });
+    });
+  }
+
+  onRemoveColor = colorId => {
+    this.state.usersRef
+    .child(`${this.state.user.uid}/colors`)
+    .child(colorId)
+    .remove(err => { if(err) console.error(err) })
   }
 
   displayUserColors = (colors) => (
     colors.length > 0 && colors.map((color, i) => (
-      <React.Fragment key={i}>
+      <div className="color__wrap" key={i}>
         <Divider />
+        <Icon 
+          link 
+          name='close' 
+          className="color__icon" 
+          onClick={() => this.onRemoveColor(color.id)}
+        />
         <div 
           className="color__container" 
           onClick={() => this.props.setUserColors(color.primaryColor, color.secondaryColor)}
@@ -63,7 +85,7 @@ class ColorPanel extends Component {
             <div className="color__overlay" style={{ background: color.secondaryColor }}></div>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     ))
   )
 
