@@ -130,7 +130,7 @@ class ColorPanel extends Component {
           <Modal.Actions>
             <Button.Group widths="2">
               <Button positive onClick={this.handleSaveColors}>
-                <Icon name="checkmark"/>Save Colors
+                <Icon name="save"/>Save Colors
               </Button>
               <Button.Or />
               <Button negative onClick={this.closeModal}>
