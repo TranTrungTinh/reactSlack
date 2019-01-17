@@ -12,6 +12,7 @@ export default class MessagesFrom extends Component {
 
   state = {
     storageRef: firebase.storage().ref(),
+    typingRef: firebase.database().ref('Typing'),
     uploadState: '',
     uploadTask: null,
     percentUploaded: 0,
@@ -48,14 +49,17 @@ export default class MessagesFrom extends Component {
 
   sendMessage = () => {
     const { messageRef } = this.props;
-    const { message, channel, errors } = this.state;
+    const { message, channel, errors, user } = this.state;
     if(message) {
       this.setState({ loading: true });
       messageRef
         .child(channel.id)
         .push()
         .set(this.createMessage())
-        .then(() => this.setState({ loading: false, message: '', errors: [] }))
+        .then(() => {
+          this.setState({ loading: false, message: '', errors: [] });
+          this.state.typingRef.child(channel.id).child(user.uid).remove();
+        })
         .catch(err => this.setState({ loading: false, errors: errors.concat(err) }));
     } else {
       this.setState({ errors: errors.concat({message: 'Please add a message...'}) })
@@ -65,6 +69,15 @@ export default class MessagesFrom extends Component {
   displayStatusMessage = errors => (
     errors.some(error => error.message.includes('message')) ? 'error' : ''
   )
+
+  handleKeyDown = event => {
+    const { message, typingRef, channel, user } = this.state;
+    if(message) {
+      typingRef.child(channel.id).child(user.uid).set(user.photoURL);
+    } else {
+      typingRef.child(channel.id).child(user.uid).remove();
+    }
+  }
 
   toggleEmoji = () => {
     this.setState({ emojiPiker: !this.state.emojiPiker });
@@ -171,6 +184,7 @@ export default class MessagesFrom extends Component {
           labelPosition="left"
           placeholder="Write your message"
           onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
           className={this.displayStatusMessage(errors)}
         />
 

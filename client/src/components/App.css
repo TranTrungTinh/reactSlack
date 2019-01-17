@@ -9,14 +9,14 @@ body {
 }
 
 .app {
-  height: 120vh;
+  height: 100vh;
   /* background: '#eee'; */
   padding: 1em !important;
 }
 
 /* Messages.js */
 .messages {
-  height: 63vh;
+  height: 64vh;
   overflow-y: scroll;
 }
 
@@ -28,7 +28,7 @@ body {
 /* MessagesForm.js */
 .message__form {
   position: fixed !important;
-  bottom: 1em;
+  bottom: 0.5em;
   margin-left: 380px !important;
   left: 0;
   right: 0.5em;
@@ -93,4 +93,88 @@ body {
   top: 7px;
   right: -14px;
   color: white;
+}
+
+/* Typing.js */
+#bubble {
+  position: relative;
+  /* top: 45vh; */
+  /* margin-left: auto;
+  margin-right: auto; */
+  width: 4em;
+  height: 1.5em;
+  border-radius: 20px;
+  background: #e6e6e6;
+}
+
+#circleWrapper {
+  width: 50px;
+  position: relative;
+  margin: 12px auto;
+}
+
+.point {
+  position: relative;
+  height: 10px;
+  width: 10px;
+  margin-left: 3px;
+  margin-right: 3px;
+  top: 2px;
+  background: darkgray;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.point {
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+#circle1 {
+  animation-name: circle1;
+}
+
+#circle2 {
+  animation-name: circle2;
+}
+
+#circle3 {
+  animation-name: circle3;
+}
+
+@-webkit-keyframes circle1 {
+  0% {
+    top: 2px;
+  }
+  15% {
+    top: -3px;
+  }
+  25% {
+    top: 2px;
+  }
+}
+
+@-webkit-keyframes circle2 {
+  10% {
+    top: 2px;
+  }
+  25% {
+    top: -3px;
+  }
+  35% {
+    top: 2px;
+  }
+}
+
+@-webkit-keyframes circle3 {
+  15% {
+    top: 2px;
+  }
+  30% {
+    top: -3px;
+  }
+  40% {
+    top: 2px;
+  }
 }
