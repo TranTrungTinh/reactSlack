@@ -20,6 +20,10 @@ class ColorPanel extends Component {
     if(this.state.user) this.addListener(this.state.user.uid);
   }
 
+  componentWillUnmount() {
+    this.removeListener()
+  }
+
   openModal = () => this.setState({ modal: true });
   closeModal = () => this.setState({ modal: false });
 
@@ -88,6 +92,11 @@ class ColorPanel extends Component {
       </div>
     ))
   )
+
+  removeListener = () => {
+    this.state.usersRef
+    .child(`${this.state.user.uid}/colors`).off()
+  }
 
   render() {
     const { modal, primary, secondary, userColors } = this.state;

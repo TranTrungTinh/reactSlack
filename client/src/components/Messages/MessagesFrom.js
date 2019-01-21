@@ -25,6 +25,13 @@ export default class MessagesFrom extends Component {
     emojiPiker: false
   }
 
+  componentWillUnmount() {
+    if(this.state.uploadTask !== null) {
+      this.state.uploadTask.cancel()
+      this.setState({ uploadTask: null })
+    }
+  }
+
   openModal = () => this.setState({ modal: true });
   closeModal = () => this.setState({ modal: false });
 
@@ -71,6 +78,9 @@ export default class MessagesFrom extends Component {
   )
 
   handleKeyDown = event => {
+    if(event.keyCode === 13) {
+      this.sendMessage();
+    }
     const { message, typingRef, channel, user } = this.state;
     if(message) {
       typingRef.child(channel.id).child(user.uid).set(user.photoURL);
