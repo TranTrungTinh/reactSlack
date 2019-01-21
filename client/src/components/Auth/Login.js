@@ -42,7 +42,7 @@ export default class Login extends Component {
       <Grid textAlign="center" verticalAlign="middle" className="login">
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h1" icon color="violet" textAlign="center" >
-            <Icon name="code branch" color="violet" />
+            <Icon name="snapchat ghost" color="violet" />
             Login to DevChat
           </Header>
 

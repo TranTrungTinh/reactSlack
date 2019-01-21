@@ -59,7 +59,7 @@ export default class UserPanel extends Component {
 
   uploadCroppedImage = () => {
     const { storageRef, userRef, blob } = this.state;
-    storageRef.child(`avatar/user-${userRef.uid}`)
+    storageRef.child(`avatar/user/${userRef.uid}`)
     .put(blob, { contentType: 'image/jpeg' })
     .then(snap => {
       snap.ref.getDownloadURL().then(downloadURL => {
@@ -95,9 +95,9 @@ export default class UserPanel extends Component {
     return (
       <Grid style={{ background: color.primaryColor }}>
         <Grid.Column>
-          <Grid.Row style={{ padding: '1.2em', margin: 0 }}>
+          <Grid.Row style={{ padding: '1.25em', margin: 0 }}>
             <Header inverted floated="left" as="h2">
-              <Icon name="code"/>
+              <Icon name="paper plane"/>
               <Header.Content>DevChat</Header.Content>
             </Header>
 

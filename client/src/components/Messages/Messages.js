@@ -257,6 +257,7 @@ class Messages extends Component {
           messageRef={messageRef}
           currentChannel={channel}
           currentUser={user}
+          isPrivateChannel={this.props.isPrivateChannel}
           isProgressBarVisible={this.isProgressBarVisible}
         />
       </React.Fragment>

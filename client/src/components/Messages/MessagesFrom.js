@@ -96,8 +96,6 @@ export default class MessagesFrom extends Component {
   handleAddEmoji = emoji => {
     const oldMessage = this.state.message;
     const newMessage = this.colonToUnicode(`${oldMessage}${emoji.colons}`);
-    console.log(emoji);
-    console.log(newMessage);
     this.setState({ message: newMessage });
     setTimeout(() => {this.messageInputRef.focus()}, 0);
   }
@@ -117,10 +115,15 @@ export default class MessagesFrom extends Component {
     });
   }
 
+  getPath = () => {
+    if(!this.props.isPrivateChannel) return 'chat/public';
+    return `chat/private/${this.state.channel.id}`;
+  }
+
   uploadFile = (file, metadata) => {
     const pathToUpLoad = this.state.channel.id;
     const ref = this.props.messageRef;
-    const filePath = `chat/public/${uuid()}.jpg`;
+    const filePath = `${this.getPath()}/${uuid()}.jpg`;
 
     this.setState({ 
       uploadState: 'uploading',
