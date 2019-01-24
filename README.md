@@ -30,3 +30,6 @@ cd client: yarn/npm start
 ## Screenshot
 <img width="1652" alt="screen shot 2019-01-21 at 12 47 15 pm" src="https://user-images.githubusercontent.com/26228049/51455158-dba8d000-1d7a-11e9-8993-532d5346fea8.png">
 <img width="1578" alt="screen shot 2019-01-21 at 12 55 38 pm" src="https://user-images.githubusercontent.com/26228049/51455386-e44dd600-1d7b-11e9-85ad-8371fd238d84.png">
+
+## Demo
+https://reactslack-6b045.firebaseapp.com
